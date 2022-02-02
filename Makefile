@@ -66,7 +66,8 @@ lint:  ## Lint go source code
 # --- Kafka ---------------------------------------------------------------------
 
 kafka:  ## Start readpanda Kafka single node borker
-	docker run -it --rm -p 9092:9092 vectorized/redpanda
+	docker run -it --rm -p 9092:9092 vectorized/redpanda \
+	  start --overprovisioned --smp 1 --memory 256M --reserve-memory 0M --node-id 0 --check=false
 
 EVENT ?= 💗
 produce:  ## Produce 3 events (EVENT=ping make produce)
