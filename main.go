@@ -8,7 +8,7 @@ import (
     "github.com/segmentio/kafka-go"
 )
 
-func main() {
+func read(name string) {
     r := kafka.NewReader(kafka.ReaderConfig{
         Brokers:   []string{"localhost:9092"},
         Topic:     "heartbeat",
@@ -23,11 +23,16 @@ func main() {
         if err != nil {
             break
         }
-        fmt.Printf("message at offset %2d: %s = %s\n", m.Offset, string(m.Key), string(m.Value))
+        fmt.Printf("%s message at offset %2d: %s = %s\n", name, m.Offset, string(m.Key), string(m.Value))
     }
 
     if err := r.Close(); err != nil {
         log.Fatal("failed to close reader:", err)
     }
+}
 
+func main() {
+    go read("reader-1")
+    go read("reader-2")
+    select {}
 }
